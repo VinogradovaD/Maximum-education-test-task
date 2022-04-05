@@ -1,0 +1,52 @@
+$light-grey: #D3D3D3
+$grey: #696969
+$dark-grey: #808080
+$red: #B22222
+
+%border
+  border: 1px solid $light-grey
+
+* 
+  font-family: Avenir, Helvetica, Arial, sans-serif
+
+#app 
+  margin: 60px 0
+
+.form-container
+  width: 70%
+  margin: 0 auto
+
+h1
+  color: $grey
+  font-size: 1.5em 
+  text-align: left
+
+form
+  @extend %border
+  text-align: left
+  * 
+    margin: 3px 0
+  
+  span
+    color: $red
+  
+  fieldset
+      display: flex
+      flex-direction: column
+      border: none
+      color: $grey
+      margin: 30px 20px
+  
+  input[type="checkbox"]
+    width: 20px
+    height: 20px
+
+  input[type="text"],
+  select
+    @extend %border
+    width: 200px
+    height: 25px
+  
+  textarea
+    @extend %border
+    height: 100px
