@@ -1,19 +1,17 @@
 <template>
-  <Form/>
+  <router-view></router-view>
 </template>
 
 <script>
-import Form from '@/components/Form.vue'
-
-export default {
-  name: 'App', 
-  components: {
-    Form
+  export default {
+    name: 'App'
   }
-}
 </script>
 
 <style lang="sass">
-  #app 
-    margin: 60px 0
+    * 
+      margin: 0
+      padding: 0
+      box-sizing: border-box
+      font-family: Avenir, Helvetica, Arial, sans-serif
 </style>

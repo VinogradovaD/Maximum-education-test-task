@@ -1,4 +1,4 @@
-# test-task
+# Test task for Maximum Education
 
 ## Project setup
 ```

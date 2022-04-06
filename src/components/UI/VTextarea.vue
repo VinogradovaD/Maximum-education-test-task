@@ -1,5 +1,10 @@
 <template>
-  <textarea wrap="soft" rows="10" required></textarea>
+  <textarea 
+    v-model="modelValue"
+    wrap="soft" 
+    rows="10" 
+    required
+  />
 </template>
 
 <script>

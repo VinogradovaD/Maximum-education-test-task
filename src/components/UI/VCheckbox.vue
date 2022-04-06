@@ -1,7 +1,11 @@
 <template>
-  <div>
-    <input type="checkbox">
+  <div> 
     <label>
+      <input 
+        type="checkbox" 
+        v-model="modelValue"
+        :value="online"
+      >
       <slot> Онлайн</slot>
     </label>
   </div>
@@ -9,7 +13,12 @@
 
 <script>
   export default {
-    name: "v-checkbox"
+    name: "v-checkbox",
+    props: {
+      modelValue: {
+        type: String
+      }
+    }
   }
 </script>
 

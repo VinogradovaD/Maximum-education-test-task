@@ -1,7 +1,9 @@
 <template>
   <div>
-    <input type="radio" :name=topic.name>
-    <label>{{topic.title}}</label>
+    <label>
+    <input type="radio" :name=topic.name :value=topic.title>
+    {{topic.title}}
+    </label>
   </div>
 </template>
 

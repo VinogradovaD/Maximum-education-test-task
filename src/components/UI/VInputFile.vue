@@ -7,7 +7,7 @@
 
 <script>
   export default {
-    name: 'v-file'
+    name: 'v-input-file'
   }
 </script>
 
