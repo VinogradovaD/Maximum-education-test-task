@@ -1,25 +1,19 @@
 <template>
-  <Form v-bind:cities="cities"/>
+  <Form/>
 </template>
 
 <script>
 import Form from '@/components/Form.vue'
-import '@/styles/styles.sass'
 
 export default {
-  name: 'App',
-  data() {
-    return {
-      cities: [
-      {id:1,title:"Москва"},
-      {id:2,title:"Санкт-Петербург"},
-      {id:3,title:"Екатеринбург"},
-      {id:4,title:"Челябинск"}
-      ]
-    }
-  }, 
+  name: 'App', 
   components: {
     Form
   }
 }
 </script>
+
+<style lang="sass">
+  #app 
+    margin: 60px 0
+</style>
