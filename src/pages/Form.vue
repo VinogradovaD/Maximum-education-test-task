@@ -1,52 +1,49 @@
 <template>
   <div class="form-container">
-    <h1>Форма подачи заявки в отдел сервиса и качества</h1>
+    <h1>{{ title }}</h1>
     <form @submit.prevent="onSubmit">
 
-      <fieldset>
-        <legend>Ваш филиал<span>*</span></legend> 
+      <fieldset class="form-section">
+        <legend class="form-section-title" v-html="cityForm.title"/>
         <v-select 
-          v-model="city"
-          v-bind:cities="cities"
-          v-bind:disabled="isDisabledSelect"
+          v-model="userData.selected_city"
+          :cities="cityForm.cities"
+          :disabled="userData.online_checkbox"
         />
         <v-checkbox
-        v-model="city"
-        v-on:change="isDisabledSelect = !isDisabledSelect"
+          v-model="userData.online_checkbox"
         />   
       </fieldset>
 
-      <fieldset>
-        <legend>Тема обращения<span>*</span></legend>
+      <fieldset class="form-section">
+        <legend class="form-section-title" v-html="topicForm.title"/>
         <v-radio 
-          v-model="problem"
-          v-bind:problems="problems" 
-          v-on:click="another_problem=''"
+          v-model="userData.selected_topic"
+          :topics="topicForm.topics" 
         />
         <v-input-text
-          v-model="another_problem"
-          v-on:click="problem=''"
-          placeholder="Другое"
+          v-model="userData.topic"
+          :placeholder="topicForm.placeholder"
         />
       </fieldset>
 
-      <fieldset>
-        <legend>Описание проблемы<span>*</span></legend>
+      <fieldset class="form-section">
+        <legend class="form-section-title" v-html="descForm.title"/>
         <v-textarea 
-          v-model="desc"
-          placeholder="Введите текст"
-          requared/>
+          v-model="userData.desc"
+          :placeholder="descForm.placeholder"
+        />
       </fieldset>
 
-      <fieldset>
-        <legend>Загрузка документов</legend>
+      <fieldset class="form-section">
+        <legend class="form-section-title" v-html="fileForm.title"/>
         <v-input-file
           v-model="file"
         />
       </fieldset>
 
       <v-button 
-        v-bind:disabled="isDisabledButton"
+        :disabled="!activeBtn"
         v-on:click="btnClick"
       />
     </form>
@@ -58,27 +55,45 @@
   export default {
     data() {
       return {
-        isDisabledButton: true,
-        isDisabledSelect: false,
-        city: '',
-        problem: '',
-        another_problem: '',
-        desc: '',
-        file: '',
-        cities: '',
-        problems: [
-          {id: 1, title: 'Недоволен качеством услуг', name: 'problem'},
-          {id: 2, title: 'Расторжение договора', name: 'problem'},
-          {id: 3, title: 'Не приходит письмо активации на почту', name: 'problem'},
-          {id: 4, title: 'Не работает личный кабинет', name: 'problem'},
-        ],
+        title: "Форма подачи заявки в отдел сервиса и качества",
+        userData: {
+          selected_city: '',
+          online_checkbox: false,
+          selected_topic: '',
+          topic: '',
+          desc: '',
+          file: '',
+        },
+        cityForm: {
+          title: "Ваш филиал<span>*</span>",
+          cities: '',
+        },
+        topicForm: {
+          title: "Тема обращения<span>*</span>",
+          topics: [
+          {id: 1, title: 'Недоволен качеством услуг', name: 'radio'},
+          {id: 2, title: 'Расторжение договора', name: 'radio'},
+          {id: 3, title: 'Не приходит письмо активации на почту', name: 'radio'},
+          {id: 4, title: 'Не работает личный кабинет', name: 'radio'},
+          ],
+          placeholder: "Другое"
+        },
+        descForm: {
+          title: "Описание проблемы<span>*</span>",
+          placeholder: "Введите текст"
+        },
+        fileForm: {
+          title: "Загрузка документов"
+        }
+        
+        
     }
   }, 
   mounted() {
     try {
       axios
         .get('https://624d935653326d0cfe4f0ab4.mockapi.io/api/v1/cities')
-        .then(response => this.cities = response.data);
+        .then(response => this.cityForm.cities = response.data);
     } catch(e) {
         console.error(e.message);
     }
@@ -89,18 +104,16 @@
         axios
           .post('https://624d935653326d0cfe4f0ab4.mockapi.io/api/v1/send-form', 
             {
-              "city": this.city, 
-              "problem": this.problem ? this.problem : this.another_problem,  
-              "desc": this.desc, 
-              "file": this.file
+              "city": this.userData.online_checkbox? "Online" : this.userData.selected_city, 
+              "problem": this.userData.topic ? this.userData.topic : this.userData.selected_topic,  
+              "desc": this.userData.desc, 
+              "file": this.userData.file
             })
           .then(response => {
-            if (response.data.success) {
-              this.$router.push("/success");;
-            }
-            else {
+            if (response.data.success) 
+              window.location.href = '/success';
+            else 
               alert('Данные не отправлены');
-            }
           });
       } catch(e) {
           console.error(e.message);
@@ -108,11 +121,9 @@
     }
   },
   computed: {
-    activateBtn() {
-      if (this.city && (this.problem || this.another_problem) && this.desc) 
-        this.isDisabledButton = false;
-      else 
-        this.isDisabledButton = true;
+    activeBtn() {
+      return ((this.userData.selected_city || this.userData.online_checkbox) 
+              && (this.userData.selected_topic || this.userData.topic) && this.userData.desc) 
     }
   },
 }
@@ -126,21 +137,21 @@
     text-align: left
 
   .form-container
-    width: 70%
+    width: 65%
     margin: 60px auto
 
   form
     margin-top: 20px
     border: 1px solid lightgrey
-    padding: 30px
+    padding: 10px 30px
 
-  fieldset
+  .form-section
     border: none
-    margin-bottom: 20px
+    margin: 30px 0 10px
   
-  legend
-    opacity: 90%
-    
-    span
-      color: red
+    .form-section-title
+      opacity: 90%
+          
+      span
+        color: red
 </style>

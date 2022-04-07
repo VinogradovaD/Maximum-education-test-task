@@ -1,26 +1,27 @@
 <template>
   <textarea 
-    v-model="modelValue"
+    class="desk-text"
     wrap="soft" 
     rows="10" 
-    required
+    v-model="modelValue"
   />
 </template>
 
 <script>
   export default {
-    name: "v-textarea"
+    name: "VTextarea"
   }
 </script>
 
-<style lang="sass">
-  textarea
+<style lang="sass" scoped>
+  .desk-text
     border: 1px solid lightgrey
     border-radius: 2px 
     resize: none
     width: 100%
     padding: 5px
     margin: 10px 0
-  textarea:focus
+
+  .desk-text:focus
     outline: none
 </style>

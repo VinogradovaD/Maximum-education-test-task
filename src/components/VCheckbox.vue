@@ -1,9 +1,13 @@
 <template>
   <div> 
-    <label>
-      <input type="checkbox"
-        value="Online"
-        @change="changeOption">
+    <input
+      type="checkbox"
+      id="checkbox"
+      class="input-checkbox" 
+      v-model="modelValue"
+      @change="changeValue"
+    />
+    <label class="label-checkbox" for="checkbox">
       <slot>Онлайн</slot>
     </label>
   </div>
@@ -11,27 +15,26 @@
 
 <script>
   export default {
-    name: "v-checkbox",
+    name: "VCheckbox",
     props: {
-      modelValue: {
-        type: String
-      }
+      modelValue: Boolean
     },
     methods: {
-      changeOption(event) {
-        this.$emit('update:modelValue', event.target.value);
+      changeValue(event) {
+        this.$emit('update:modelValue', event.target.checked);
       }
     }
   }
 </script>
 
 <style lang="sass" scoped>
-  input[type="checkbox"]
+  .input-checkbox
     width: 20px
     height: 20px
     vertical-align: middle
     margin-right: 3px
-  label
+
+  .label-checkbox
     font-size: 13px
     opacity: 90%
 </style>

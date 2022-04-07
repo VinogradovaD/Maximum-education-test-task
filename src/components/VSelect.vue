@@ -1,9 +1,12 @@
 <template>
-  <select @change="changeOption">
-    <option hidden>Выберите город</option>
+  <select>
+    <option hidden>
+      <slot>Выберите город</slot>
+    </option>
     <option 
-      v-for="city of cities"
+      v-for="city in cities"
       :key="city.id"
+      @change="changeValue"
     > 
       {{city.title}}
     </option>
@@ -12,17 +15,13 @@
 
 <script>
   export default {
-    name: 'v-select',  
+    name: 'VSelect',  
     props: {
-      modelValue: {
-        type: String
-      },
-      cities: {
-        type: Array
-      }
+      modelValue: String,
+      cities: Array
     },
     methods: {
-      changeOption(event) {
+      changeValue(event) {
         this.$emit('update:modelValue', event.target.value);
       }
     }
@@ -33,7 +32,7 @@
   select
     border: 1px solid lightgrey
     border-radius: 2px
-    width: 200px
+    width: 230px
     height: 25px
     margin: 15px 0
     outline: none

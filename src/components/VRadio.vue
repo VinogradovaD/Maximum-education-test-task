@@ -1,30 +1,32 @@
 <template>
   <div 
-    v-for="problem of problems" 
-    :key="problem.id"
+    v-for="topic in topics" 
+    :key="topic.id"
   >
     <input 
       type="radio" 
+      class="input-radio"
+      :id="topic.id" 
+      :name="topic.name"
+      :value="topic.title"
       v-model="modelValue"
-      :id="problem.id" 
-      :name="problem.name"
-      :value="problem.title"
-      @change="changeOption">
+      @change="changeValue">
     <label 
-      :for="problem.id">
-      {{problem.title}}
+      class="label-radio"
+      :for="topic.id">
+      {{topic.title}}
     </label>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'v-radio',
+    name: 'VRadio',
     props: {
-      problems: Array
+      topics: Array
     },
     methods: {
-      changeOption(event) {
+      changeValue(event) {
         this.$emit('update:modelValue', event.target.value);
       }
     }
@@ -33,14 +35,14 @@
 </script>
 
 <style lang="sass" scoped>
-  input[type="radio"]
+  div
+      margin: 15px 0
+  .input-radio
     width: 20px
     height: 20px
     vertical-align: middle
     margin-right: 3px
-  label
+  .label-radio
     font-size: 13px
     opacity: 90%
-  div
-    margin: 15px 0
 </style>
