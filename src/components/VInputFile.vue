@@ -1,13 +1,16 @@
 <template>
   <div>
     <p>Приложите, пожалуйста, полноэкранный скриншот.<br> Это поможет быстрее решить проблему.</p>
-    <input type="file">
+    <input
+      type="file">
   </div>
 </template>
 
 <script>
   export default {
-    name: 'v-input-file'
+    name: 'v-input-file',
+    props: {
+    }
   }
 </script>
 

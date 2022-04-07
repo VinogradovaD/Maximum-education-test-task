@@ -1,8 +1,9 @@
 <template>
-  <select v-model="modelValue" @change="changeOption">
+  <select @change="changeOption">
     <option hidden>Выберите город</option>
     <option 
       v-for="city of cities"
+      :key="city.id"
     > 
       {{city.title}}
     </option>
