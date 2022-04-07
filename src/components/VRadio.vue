@@ -22,32 +22,31 @@
 </template>
 
 <script>
-  export default {
-    name: 'v-radio',
-    props: {
-      topics: Array,
-      modelValue: String
-    },
-    methods: {
-      changeValue(event) {
-        this.$emit('update:modelValue', event.target.value);
-      }
+export default {
+  name: 'v-radio',
+  props: {
+    topics: Array,
+    modelValue: String
+  },
+  methods: {
+    changeValue(event) {
+      this.$emit('update:modelValue', event.target.value);
     }
   }
-
+}
 </script>
 
 <style lang="sass" scoped>
-  div
-    margin: 15px 0
+div
+  margin: 15px 0
 
-  .input-radio
-    width: 20px
-    height: 20px
-    vertical-align: middle
-    margin-right: 3px
+.input-radio
+  width: 20px
+  height: 20px
+  vertical-align: middle
+  margin-right: 3px
 
-  .label-radio
-    font-size: 13px
-    opacity: 90%
+.label-radio
+  font-size: 13px
+  opacity: 90%
 </style>

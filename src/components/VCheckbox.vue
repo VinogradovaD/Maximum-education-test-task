@@ -14,27 +14,27 @@
 </template>
 
 <script>
-  export default {
-    name: "v-checkbox",
-    props: {
-      modelValue: Boolean
-    },
-    methods: {
-      changeValue(event) {
-        this.$emit('update:modelValue', event.target.checked);
-      }
+export default {
+  name: "v-checkbox",
+  props: {
+    modelValue: Boolean
+  },
+  methods: {
+    changeValue(event) {
+      this.$emit('update:modelValue', event.target.checked);
     }
   }
+}
 </script>
 
 <style lang="sass" scoped>
-  .input-checkbox
-    width: 20px
-    height: 20px
-    vertical-align: middle
-    margin-right: 3px
+.input-checkbox
+  width: 20px
+  height: 20px
+  vertical-align: middle
+  margin-right: 3px
 
-  .label-checkbox
-    font-size: 13px
-    opacity: 90%
+.label-checkbox
+  font-size: 13px
+  opacity: 90%
 </style>
