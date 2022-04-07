@@ -1,20 +1,29 @@
 <template>
   <textarea 
-    class="desk-text"
+    class="text"
     wrap="soft" 
     rows="10" 
     v-model="modelValue"
+    @input="updateValue"
   />
 </template>
 
 <script>
   export default {
-    name: "VTextarea"
+    name: "v-textarea",
+    props: {
+      modelValue: String
+    },
+    methods: {
+      updateValue(event) {
+        this.$emit('update:modelValue', event.target.value)
+      }
+    }
   }
 </script>
 
 <style lang="sass" scoped>
-  .desk-text
+  .text
     border: 1px solid lightgrey
     border-radius: 2px 
     resize: none
@@ -22,6 +31,6 @@
     padding: 5px
     margin: 10px 0
 
-  .desk-text:focus
+  .text:focus
     outline: none
 </style>

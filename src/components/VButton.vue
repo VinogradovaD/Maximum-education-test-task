@@ -1,5 +1,5 @@
 <template>
-  <button type="submit">
+  <button class="button" type="submit">
     <slot>Отправить</slot>
   </button>
 </template>
@@ -10,8 +10,8 @@
   }
 </script>
 
-<style lang="sass">
-  button
+<style lang="sass" scoped>
+  .button
     border: none
     background-color: #ff7f50
     color: white
@@ -22,8 +22,7 @@
     margin: 10px 0
     cursor: pointer
 
-  button:disabled
+  .button:disabled
     background-color: lightgrey
     cursor: default
-    
 </style>

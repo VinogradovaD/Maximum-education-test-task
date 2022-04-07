@@ -3,12 +3,22 @@
     type="text"
     class="input-text"
     v-model="modelValue"
+    @input="updateValue"
+    @click="$emit('delete-selected-topic')"
   />
 </template>
 
 <script>
   export default {
-    name: 'VInputText'
+    name: 'v-input-text',
+    props: {
+      modelValue: String
+    },
+    methods: {
+      updateValue(event) {
+        this.$emit('update:modelValue', event.target.value)
+      }
+    }
   }
 </script>
 

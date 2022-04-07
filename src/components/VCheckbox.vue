@@ -15,7 +15,7 @@
 
 <script>
   export default {
-    name: "VCheckbox",
+    name: "v-checkbox",
     props: {
       modelValue: Boolean
     },

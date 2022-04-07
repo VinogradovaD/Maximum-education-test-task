@@ -20,10 +20,12 @@
         <v-radio 
           v-model="userData.selected_topic"
           :topics="topicForm.topics" 
+          @delete-text="userData.topic=''"
         />
         <v-input-text
           v-model="userData.topic"
           :placeholder="topicForm.placeholder"
+          @delete-selected-topic="userData.selected_topic=''"
         />
       </fieldset>
 
@@ -37,8 +39,11 @@
 
       <fieldset class="form-section">
         <legend class="form-section-title" v-html="fileForm.title"/>
-        <v-input-file
-          v-model="file"
+        <p v-html="fileForm.text"/>
+        <input
+          type="file" 
+          ref="file" 
+          @change="FileUpload"
         />
       </fieldset>
 
@@ -57,7 +62,7 @@
       return {
         title: "Форма подачи заявки в отдел сервиса и качества",
         userData: {
-          selected_city: '',
+          selected_city: 'Выберите город',
           online_checkbox: false,
           selected_topic: '',
           topic: '',
@@ -83,10 +88,9 @@
           placeholder: "Введите текст"
         },
         fileForm: {
-          title: "Загрузка документов"
+          title: "Загрузка документов",
+          text: "Приложите, пожалуйста, полноэкранный скриншот.<br> Это поможет быстрее решить проблему."
         }
-        
-        
     }
   }, 
   mounted() {
@@ -99,21 +103,33 @@
     }
   }, 
   methods: {
+    FileUpload() {
+      this.userData.file = this.$refs.file.files[0];
+    },
     onSubmit() {
+      let formData = new FormData();
+      if (this.userData.file) 
+        formData.append('file', this.userData.file);
+      else 
+        formData = null;
+
       try {
         axios
           .post('https://624d935653326d0cfe4f0ab4.mockapi.io/api/v1/send-form', 
-            {
+            [
+              {
               "city": this.userData.online_checkbox? "Online" : this.userData.selected_city, 
               "problem": this.userData.topic ? this.userData.topic : this.userData.selected_topic,  
               "desc": this.userData.desc, 
-              "file": this.userData.file
-            })
+              }, 
+              FormData
+            ]
+          )
           .then(response => {
             if (response.data.success) 
               window.location.href = '/success';
             else 
-              alert('Данные не отправлены');
+              alert('Ошибка отправки заявки');
           });
       } catch(e) {
           console.error(e.message);
@@ -123,7 +139,7 @@
   computed: {
     activeBtn() {
       return ((this.userData.selected_city || this.userData.online_checkbox) 
-              && (this.userData.selected_topic || this.userData.topic) && this.userData.desc) 
+              && (this.userData.selected_topic || this.userData.topic.trim()) && this.userData.desc.trim()) 
     }
   },
 }
@@ -147,11 +163,35 @@
 
   .form-section
     border: none
-    margin: 30px 0 10px
+    margin: 30px 0 20px
   
     .form-section-title
       opacity: 90%
           
       span
         color: red
+
+    p
+      font-size: 12px
+      opacity: 80%
+      margin: 10px 0
+  
+  @media screen and (max-width: 992px)
+    h1
+      font-size: 1.2em
+
+    .form-container
+      width: 75%
+  @media screen and (max-width: 768px)
+    h1
+      font-size: 1.1em
+
+    .form-container
+      width: 85%
+  @media screen and (max-width: 576px)
+    h1
+      text-align: center
+
+    .form-container
+      width: 90%
 </style>
