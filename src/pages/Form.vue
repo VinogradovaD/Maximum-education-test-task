@@ -83,13 +83,14 @@ export default {
     },
     onSubmit() {
       let formData = new FormData();
-      formData.append('file', this.userData.file);
+      if(this.userData.file)
+        formData.append('file', this.userData.file);
       let json = {
          "city": this.userData.online_checkbox? "Online" : this.userData.selected_city, 
          "problem": this.userData.topic ? this.userData.topic : this.userData.selected_topic,  
          "desc": this.userData.desc
           };
-      this.$store.dispatch("postData", [json, formData]);
+      this.$store.dispatch("postData", (this.userData.file) ? [json, formData] : json);
     }
   },
   computed: {
