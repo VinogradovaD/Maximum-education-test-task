@@ -1,13 +1,13 @@
 <template>
   <div class="form-container">
-    <h1>{{ title }}</h1>
+    <h1>Форма подачи заявки в отдел сервиса и качества</h1>
     <form @submit.prevent="onSubmit">
 
       <fieldset class="form-section">
-        <legend class="form-section-title" v-html="cityForm.title"/>
+        <legend class="form-section-title">Ваш филиал<span>*</span></legend>
         <v-select 
           v-model="userData.selected_city"
-          :cities="cityForm.cities"
+          :cities="cities"
           :disabled="userData.online_checkbox"
         />
         <v-checkbox
@@ -16,30 +16,29 @@
       </fieldset>
 
       <fieldset class="form-section">
-        <legend class="form-section-title" v-html="topicForm.title"/>
+        <legend class="form-section-title">Тема обращения<span>*</span></legend>
         <v-radio 
           v-model="userData.selected_topic"
-          :topics="topicForm.topics" 
+          :topics="topics" 
           @delete-text="userData.topic=''"
         />
         <v-input-text
           v-model="userData.topic"
-          :placeholder="topicForm.placeholder"
+          placeholder="Другое"
           @delete-selected-topic="userData.selected_topic=''"
         />
       </fieldset>
 
       <fieldset class="form-section">
-        <legend class="form-section-title" v-html="descForm.title"/>
+        <legend class="form-section-title">Описание проблемы<span>*</span></legend>
         <v-textarea 
           v-model="userData.desc"
-          :placeholder="descForm.placeholder"
+          placeholder="Введите текст"
         />
       </fieldset>
-
       <fieldset class="form-section">
-        <legend class="form-section-title" v-html="fileForm.title"/>
-        <p v-html="fileForm.text"/>
+        <legend class="form-section-title">Загрузка документов</legend>
+        <p>Приложите, пожалуйста, полноэкранный скриншот.<br> Это поможет быстрее решить проблему.</p>
         <input
           type="file" 
           ref="file" 
@@ -56,12 +55,9 @@
 </template>
 
 <script>
-import axios from "axios"
-
 export default {
   data() {
     return {
-      title: "Форма подачи заявки в отдел сервиса и качества",
       userData: {
         selected_city: 'Выберите город',
         online_checkbox: false,
@@ -70,77 +66,39 @@ export default {
         desc: '',
         file: '',
       },
-      cityForm: {
-        title: "Ваш филиал<span>*</span>",
-        cities: '',
-      },
-      topicForm: {
-        title: "Тема обращения<span>*</span>",
-        topics: [
+      topics: [
         {id: 1, title: 'Недоволен качеством услуг', name: 'radio'},
         {id: 2, title: 'Расторжение договора', name: 'radio'},
         {id: 3, title: 'Не приходит письмо активации на почту', name: 'radio'},
         {id: 4, title: 'Не работает личный кабинет', name: 'radio'},
-        ],
-        placeholder: "Другое"
-      },
-      descForm: {
-        title: "Описание проблемы<span>*</span>",
-        placeholder: "Введите текст"
-      },
-      fileForm: {
-        title: "Загрузка документов",
-        text: "Приложите, пожалуйста, полноэкранный скриншот.<br> Это поможет быстрее решить проблему."
-      }
-  }
-}, 
-mounted() {
-  try {
-    axios
-      .get('https://624d935653326d0cfe4f0ab4.mockapi.io/api/v1/cities')
-      .then(response => this.cityForm.cities = response.data);
-  } catch(e) {
-      console.error(e.message);
-  }
-}, 
-methods: {
-  FileUpload() {
-    this.userData.file = this.$refs.file.files[0];
-  },
-  onSubmit() {
-    let formData = new FormData();
-    if (this.userData.file) 
-      formData.append('file', this.userData.file);
-    else 
-      formData = null;
-
-    try {
-      axios
-        .post('https://624d935653326d0cfe4f0ab4.mockapi.io/api/v1/send-form', 
-          [
-            {
-            "city": this.userData.online_checkbox? "Online" : this.userData.selected_city, 
-            "problem": this.userData.topic ? this.userData.topic : this.userData.selected_topic,  
-            "desc": this.userData.desc, 
-            }, 
-            FormData
-          ]
-        )
-        .then(response => {
-          if (response.data.success) 
-            window.location.href = '/success';
-          else 
-            alert('Ошибка отправки заявки');
-        });
-    } catch(e) {
-        console.error(e.message);
+        ], 
     }
-  }
-},
-computed: {
-  activeBtn() {
-    return ((this.userData.selected_city || this.userData.online_checkbox) 
-            && (this.userData.selected_topic || this.userData.topic.trim()) && this.userData.desc.trim()) 
+  }, 
+  mounted() {
+    this.$store.dispatch("getCities");
+  },
+  methods: {
+    FileUpload() {
+      this.userData.file = this.$refs.file.files[0];
+    },
+    onSubmit() {
+      let formData = new FormData();
+      formData.append('file', this.userData.file);
+      let json = {
+         "city": this.userData.online_checkbox? "Online" : this.userData.selected_city, 
+         "problem": this.userData.topic ? this.userData.topic : this.userData.selected_topic,  
+         "desc": this.userData.desc
+          };
+      this.$store.dispatch("postData", [json, formData]);
+    }
+  },
+  computed: {
+    cities() {
+      return this.$store.state.cities;
+    },
+    activeBtn() {
+      return ((this.userData.selected_city || this.userData.online_checkbox) 
+              && (this.userData.selected_topic || this.userData.topic.trim()) && this.userData.desc.trim()) 
     }
   },
 }
