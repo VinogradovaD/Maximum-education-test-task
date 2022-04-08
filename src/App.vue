@@ -3,15 +3,15 @@
 </template>
 
 <script>
-  export default {
-    name: 'App'
-  }
+export default {
+  name: 'App'
+}
 </script>
 
 <style lang="sass">
-    * 
-      margin: 0
-      padding: 0
-      box-sizing: border-box
-      font-family: Avenir, Helvetica, Arial, sans-serif
+* 
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+  font-family: Avenir, Helvetica, Arial, sans-serif
 </style>
